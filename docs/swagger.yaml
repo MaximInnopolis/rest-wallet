@@ -1,0 +1,95 @@
+basePath: /
+definitions:
+  models.Wallet:
+    properties:
+      balance:
+        type: integer
+      id:
+        type: integer
+    type: object
+  models.WalletUpdateRequest:
+    properties:
+      amount:
+        type: integer
+      operationType:
+        type: string
+      walletId:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: REST API service for wallet
+  title: Wallet API
+  version: "1.0"
+paths:
+  /api/v1/wallet:
+    post:
+      consumes:
+      - application/json
+      description: Updates a wallet by applying a deposit or withdrawal operation.
+      parameters:
+      - description: Wallet update request
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.WalletUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Wallet updated successfully
+          schema:
+            type: string
+        "400":
+          description: Invalid input
+          schema:
+            type: string
+        "404":
+          description: Wallet not found
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Update Wallet
+      tags:
+      - Wallets
+  /api/v1/wallets/{WALLET_UUID}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the balance of a wallet by its UUID.
+      parameters:
+      - description: Wallet UUID
+        in: path
+        name: WALLET_UUID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Wallet balance retrieved successfully
+          schema:
+            $ref: '#/definitions/models.Wallet'
+        "400":
+          description: Invalid walletId
+          schema:
+            type: string
+        "404":
+          description: Wallet not found
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Get Wallet Balance
+      tags:
+      - Wallets
+schemes:
+- http
+swagger: "2.0"
